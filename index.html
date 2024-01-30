@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Guess a Word Game JavaScript</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>Guess the Word</h1>
+      <div class="content-1">
+        <div class="details">
+          <p class="instructions"><b>Instruction:</b></p>
+          <ul>
+            <li class="instruction-1">Crack the word in time with 0 wrong guess to get <b>15 points</b>.🎯</li>
+            <li class="instruction-2"><b>30 seconds</b> to crack the word.⌛</li>
+            <li class="instruction-3">If you run out of time, you lose <b>10 points</b>.😞</li>
+            <li class="instruction-4">Initial <b>8 or 6 guesses</b> for each word depending on the length of the word.🤔</li>
+            <li class="instruction-5">Each wrong guess deducts <b>1 point</b>.😕</li>
+            <li class="instruction-6">If you run out of guesses, you lose <b>10 points</b>.😞</li>
+            <li class="instruction-7">Skip to lose <b>10 points</b>.😞</li>
+          </ul>
+        </div>
+        <form id="userForm" style="display: flex; flex-direction: column; align-items: center;">
+          <!-- <label for="name" style="margin-bottom: 10px;">Name:</label> -->
+          <input type="text" id="name" name="name" placeholder="Name" required style="padding: 8px; width: 50%; margin-bottom: 10px;">
+      
+          <!-- <label for="email" style="margin-bottom: 10px;">Email:</label> -->
+          <input type="email" id="email" name="email" placeholder="Email" required style="padding: 8px; width: 50%; margin-bottom: 10px;">
+      
+          <button class="button-container" type="submit" onclick="showContent2(event)">Start</button>
+        </form>
+        <!-- <p>To see the leaderboard <span><button >Leaderboard</button></span></p> -->
+        <button onclick="leaderboard(event)">Leaderboard</button>
+      </div>
+      <div class="content-2">
+        <input type="text" class="typing-input" maxlength="1">
+        <div class="inputs"></div>
+        <div class="details">
+          <p class="hint">Hint: <span></span></p>
+          <p class="guess-left">Remaining guesses: <span></span></p>
+          <p class="wrong-letter">Wrong letters: <span></span></p>
+          <p>Time left: <span id="countdown">30</span> seconds</p> 
+        </div>
+        <button class="skip-btn">Skip</button>
+      </div>
+    </div>
+    <div class="results">
+      <div class="game-modal">
+        <div class="content">
+            <img src="images/victory.gif" alt="gif">
+            <h4 class="message">Game Over!</h4>
+            <h4 class="points">-10 points</h4>
+            <p>The correct word was: <b>rainbow</b></p>
+            
+            <button class="next-btn" onclick="showContent2(event)">Next</button>
+        </div>
+      </div>
+    </div>
+    <div class="final" style="display: none;">
+      <div id="leaderboard">
+        <h1>Leaderboard</h1>
+        <div class="column-headers">
+            <span>Rank</span>
+            <span>Name</span>
+            <span>Points</span>
+        </div>
+        <ol id="leaderboard-list"></ol>
+        <button class="goBack" onclick="showContent2(event)">Back to game</button>
+      </div>
+    </div>
+    <script src="js/words.js"></script>
+    <script src="js/script.js"></script>
+    
+  </body>
+</html>
