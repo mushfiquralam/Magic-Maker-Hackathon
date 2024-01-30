@@ -79,7 +79,7 @@ body{
   /* #1BB295; */
   transition: all 0.3s ease;
 }
-.content-2 .skip-btn:hover, .content-1 .button-container:hover{
+.content-2 .skip-btn:hover, .content-1 .startBtn:hover{
   background: #8286c9;
   /* #18a589 */
 }
@@ -88,7 +88,7 @@ body{
   color: #000000; /* Change the color to your preference */
   margin-left: 5px; /* Add some margin to separate the icon from text */
 }
-.content-1 .button-container {
+.content-1 .startBtn {
   width: 30%;
   border: none;
   cursor: pointer;
@@ -268,6 +268,21 @@ body{
   }
 }
 
+.info {
+  text-align: justify;
+  margin-bottom: 15px;
+}
+
+.info p {
+  display: inline-block;
+  font-size: 17px;
+}
+
+.info .userPoints {
+  text-align: middle;
+  margin-left: 120px;
+}
+
 @media screen and (max-width: 460px) {
   .wrapper {
     width: 100%;
@@ -288,7 +303,7 @@ body{
   .details p{
     font-size: 17px;
   }
-  .content-2 .skip-btn, .content-1 .button-container{
+  .content-2 .skip-btn, .content-1 .startBtn{
     padding: 14px 0;
     font-size: 16px;
   }

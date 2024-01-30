@@ -25,16 +25,20 @@
         <form id="userForm" style="display: flex; flex-direction: column; align-items: center;">
           <!-- <label for="name" style="margin-bottom: 10px;">Name:</label> -->
           <input type="text" id="name" name="name" placeholder="Name" required style="padding: 8px; width: 50%; margin-bottom: 10px;">
-      
+          
           <!-- <label for="email" style="margin-bottom: 10px;">Email:</label> -->
           <input type="email" id="email" name="email" placeholder="Email" required style="padding: 8px; width: 50%; margin-bottom: 10px;">
-      
-          <button class="button-container" type="submit" onclick="showContent2(event)">Start</button>
+          
+          <button class="startBtn" type="submit">Start</button>
         </form>
         <!-- <p>To see the leaderboard <span><button >Leaderboard</button></span></p> -->
         <button onclick="leaderboard(event)">Leaderboard</button>
       </div>
       <div class="content-2">
+        <div class="info">
+          <!-- <p class="userName">Name</p> -->
+          <p class="userPoints">Total Points:</p>
+        </div>
         <input type="text" class="typing-input" maxlength="1">
         <div class="inputs"></div>
         <div class="details">
@@ -52,9 +56,10 @@
             <img src="images/victory.gif" alt="gif">
             <h4 class="message">Game Over!</h4>
             <h4 class="points">-10 points</h4>
+            <h4 class="totalPoints"></h4>
             <p>The correct word was: <b>rainbow</b></p>
             
-            <button class="next-btn" onclick="showContent2(event)">Next</button>
+            <button class="next-btn">Next</button>
         </div>
       </div>
     </div>
@@ -71,7 +76,8 @@
       </div>
     </div>
     <script src="js/words.js"></script>
-    <script src="js/script.js"></script>
+    <script type="module" src="js/script.js"></script>
+    <!-- <script type="module" src="js/firebase-config.js"></script> -->
     
   </body>
 </html>
