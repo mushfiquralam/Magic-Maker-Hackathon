@@ -43,7 +43,6 @@ var start = document.getElementsByClassName("startBtn")[0];
 var next = document.getElementsByClassName("next-btn")[0];
 var back = document.getElementsByClassName("goBack")[0];
 var leaderboardBtn = document.getElementsByClassName("leaderboard-btn")[0];
-// var leaderboardBtn2 = document.getElementsByClassName("leaderboard-btn")[1];
 
 function sanitizeEmail(email) {
     // Replace "@" with "_at_" and "." with "dot"
@@ -116,14 +115,15 @@ function getTotalPoints(userEmail) {
         });
 }
 
-let students = [];
+var students = [];
 
-function getAllData() {
+function getAllData(event) {
+    event.preventDefault();
     const dbref = ref(db);
-    
 
     get(child(dbref, "The Participants"))
         .then((snapshot) => {
+            students = []; // Clear existing data
             snapshot.forEach((childSnapshot) => {
                 students.push(childSnapshot.val());
             });
@@ -131,19 +131,17 @@ function getAllData() {
             // Sort students array in ascending order based on points
             students.sort((a, b) => b.ParticipantTotalPoints - a.ParticipantTotalPoints);
 
-            // console.log(students);
+            // Call updateLeaderboard after fetching data
+            updateLeaderboard(event);
         })
         .catch((error) => {
             console.error("Error fetching data: " + error);
         });
 }
 
-getAllData();
-
 function updateLeaderboard(event) {
     event.preventDefault();
     const leaderboardList = document.getElementById("leaderboard-list");
-    // getAllData();
 
     // Clear existing leaderboard content
     leaderboardList.innerHTML = "";
@@ -163,9 +161,10 @@ function updateLeaderboard(event) {
     });
 }
 
-
-
-
+leaderboardBtn.addEventListener("click", function (event) {
+    getAllData(event);
+    showLeaderboard();
+});
 
 function results(timesUp, victory) {
     if (timesUp && !victory){
@@ -216,7 +215,7 @@ function showContent2(event) {
 
 function goBackToGame(event) {
     event.preventDefault();
-    // getTotalPoints(participantEmail);
+    getTotalPoints(participantEmail);
     randomWord();
     document.querySelector('.wrapper').style.display = 'block';
     document.querySelector('.content-1').style.display = 'none';
@@ -241,7 +240,7 @@ function showLeaderboard() {
 
 function randomWord() {
     clearInterval(timer); // Clear any existing timer
-    countdown = 10; // Reset countdown for each level
+    countdown = 30; // Reset countdown for each level
 
     let ranItem = wordList[Math.floor(Math.random() * wordList.length)];
     word = ranItem.word;
@@ -309,10 +308,6 @@ function initGame(e) {
     }, 100);
 }
 
-
-// ... Existing imports and configurations ...
-
-// New function for name and email input validation
 function validateNameAndEmail() {
     const userName = document.getElementById("name").value;
     const userEmail = document.getElementById("email").value;
@@ -329,20 +324,9 @@ function validateNameAndEmail() {
         return false;
     }
 
-    // Add any additional validation logic as needed
-
     return true;
 }
 
-// ... Existing code continues ...
-
-
-
-
-
-// ... Existing code ...
-
-// Modify the event listener for the Start button
 start.addEventListener("click", function (event) {
     event.preventDefault();
 
@@ -355,7 +339,6 @@ start.addEventListener("click", function (event) {
     showContent2(event);
 });
 
-// ... Existing code continues ...
 
 next.addEventListener("click", showContent2);
 back.addEventListener("click", goBackToGame);
@@ -363,12 +346,6 @@ resetBtn.addEventListener("click", skip);
 typingInput.addEventListener("input", initGame);
 inputs.addEventListener("click", () => typingInput.focus());
 document.addEventListener("keydown", () => typingInput.focus());
-// Ensure that the event is properly bound to the button
-// document.querySelector('.content-1 p span button').addEventListener('click', leaderboard);
-leaderboardBtn.addEventListener("click", function(event) {
-    updateLeaderboard(event);
-    showLeaderboard();
-});
 
 
 
