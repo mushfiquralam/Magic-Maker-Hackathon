@@ -41,6 +41,9 @@ var userEmail = document.getElementById("email");
 
 var start = document.getElementsByClassName("startBtn")[0];
 var next = document.getElementsByClassName("next-btn")[0];
+var back = document.getElementsByClassName("goBack")[0];
+var leaderboardBtn = document.getElementsByClassName("leaderboard-btn")[0];
+// var leaderboardBtn2 = document.getElementsByClassName("leaderboard-btn")[1];
 
 function sanitizeEmail(email) {
     // Replace "@" with "_at_" and "." with "dot"
@@ -104,7 +107,8 @@ function getTotalPoints(userEmail) {
         .then((snapshot) => {
             if (snapshot.exists()) {
                 userTotalPoints.innerHTML = `Total Points: <b>${snapshot.val().ParticipantTotalPoints}</b>`;
-                totalPointsResults.innerText = `Total points: ${snapshot.val().ParticipantTotalPoints}`;
+                let totalPointsVal = snapshot.val().ParticipantTotalPoints + points;
+                totalPointsResults.innerText = `Total points: ${totalPointsVal}`;
             }
         })
         .catch((error) => {
@@ -112,13 +116,65 @@ function getTotalPoints(userEmail) {
         });
 }
 
+let students = [];
+
+function getAllData() {
+    const dbref = ref(db);
+    
+
+    get(child(dbref, "The Participants"))
+        .then((snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                students.push(childSnapshot.val());
+            });
+
+            // Sort students array in ascending order based on points
+            students.sort((a, b) => b.ParticipantTotalPoints - a.ParticipantTotalPoints);
+
+            // console.log(students);
+        })
+        .catch((error) => {
+            console.error("Error fetching data: " + error);
+        });
+}
+
+getAllData();
+
+function updateLeaderboard(event) {
+    event.preventDefault();
+    const leaderboardList = document.getElementById("leaderboard-list");
+    // getAllData();
+
+    // Clear existing leaderboard content
+    leaderboardList.innerHTML = "";
+
+    // Assuming you have the sorted `students` array available
+    const top5 = students.slice(0, 5);
+
+    top5.forEach((participant, index) => {
+        const listItem = document.createElement("li");
+        listItem.innerHTML = `
+            <span class="participant-rank">${index + 1}</span>
+            <span class="trophy">${index === 0 ? '🏆' : ''}</span>
+            <span class="participant-name">${participant.ParticipantName}</span>
+            <span class="participant-score">${participant.ParticipantTotalPoints}</span>
+        `;
+        leaderboardList.appendChild(listItem);
+    });
+}
+
+
+
+
+
 function results(timesUp, victory) {
     if (timesUp && !victory){
         resultsImage.src = 'images/lost.gif';
         resultsMessage.innerText = `Time's Up`;
-        resultsPoints.innerText = '-10 points';
+        points = -10;
+        resultsPoints.innerText = `${points} points`;
         resultsPTag.innerHTML = `The correct word was: <b>${word.toUpperCase()}</b>`;
-        updateTotalPoints(participantEmail, -10);
+        updateTotalPoints(participantEmail, points);
         showContentResults();
     } else if (victory && !timesUp) {
         resultsImage.src = 'images/victory.gif';
@@ -135,43 +191,14 @@ function results(timesUp, victory) {
     } 
 }
 
-function leaderboard(event) {
-    const leaderboardData = [
-        { name: "Mushfiq", score: 150 },
-        { name: "Jesey", score: 120 },
-        { name: "Towhid", score: 100 },
-        { name: "Hemel", score: 90 },
-        { name: "Gadiel", score: 80 },
-        { name: "Imran", score: 75 },
-        { name: "Riyad", score: 70 },
-        // Add more participants as needed
-    ];
-
-    leaderboardData.sort((a, b) => b.score - a.score);
-
-    const top5 = leaderboardData.slice(0, 5);
-
-    const leaderboardList = document.getElementById("leaderboard-list");
-
-    top5.forEach((participant, index) => {
-        const listItem = document.createElement("li");
-        listItem.innerHTML = `
-            <span class="participant-rank">${index + 1}</span>
-            <span class="trophy">${index === 0 ? '🏆' : ''}</span>
-            <span class="participant-name">${participant.name}</span>
-            <span class="participant-score">${participant.score}</span>
-        `;
-        leaderboardList.appendChild(listItem);
-    });
-}
-
 function skip(event) {
     clearInterval(timer);
     resultsImage.src = 'images/lost.gif';
     resultsMessage.innerText = `Skipped Level!`;
-    resultsPoints.innerText = '-10 points';
+    points = -10;
+    resultsPoints.innerText = `${points} points`;
     resultsPTag.innerHTML = `The correct word was: <b>${word.toUpperCase()}</b>`;
-    updateTotalPoints(participantEmail, -10);
+    updateTotalPoints(participantEmail, points);
     showContentResults();
 }
 
@@ -183,6 +210,19 @@ function showContent2(event) {
     document.querySelector('.content-1').style.display = 'none';
     document.querySelector('.content-2').style.display = 'block';
     document.querySelector('.results').style.display = 'none';
+    document.querySelector('.final').style.display = 'none';
+    document.querySelector('.wrapper').style.width = '430px';
+}
+
+function goBackToGame(event) {
+    event.preventDefault();
+    // getTotalPoints(participantEmail);
+    randomWord();
+    document.querySelector('.wrapper').style.display = 'block';
+    document.querySelector('.content-1').style.display = 'none';
+    document.querySelector('.content-2').style.display = 'block';
+    document.querySelector('.results').style.display = 'none';
+    document.querySelector('.final').style.display = 'none';
     document.querySelector('.wrapper').style.width = '430px';
 }
 
@@ -190,6 +230,13 @@ function showContentResults() {
     getTotalPoints(participantEmail);
     document.querySelector('.wrapper').style.display = 'none';
     document.querySelector('.results').style.display = 'block';
+    document.querySelector('.final').style.display = 'none';
+}
+
+function showLeaderboard() {
+    document.querySelector('.wrapper').style.display = 'none';
+    document.querySelector('.results').style.display = 'none';
+    document.querySelector('.final').style.display = 'flex';
 }
 
 function randomWord() {
@@ -253,25 +300,75 @@ function initGame(e) {
             clearInterval(timer);
             resultsImage.src = 'images/lost.gif';
             resultsMessage.innerText = `Ran out of guesses!`;
-            resultsPoints.innerText = '-10 points';
+            points = -10;
+            resultsPoints.innerText = `${points} points`;
             resultsPTag.innerHTML = `The correct word was: <b>${word.toUpperCase()}</b>`;
-            updateTotalPoints(participantEmail, -10);
+            updateTotalPoints(participantEmail, points);
             showContentResults();
         }
     }, 100);
 }
 
-// start.addEventListener("click", AddParticipantDetails);
-start.addEventListener("click", function(event) {
+
+// ... Existing imports and configurations ...
+
+// New function for name and email input validation
+function validateNameAndEmail() {
+    const userName = document.getElementById("name").value;
+    const userEmail = document.getElementById("email").value;
+
+    // Check if name and email are not empty
+    if (!userName || !userEmail) {
+        alert("Please provide both name and email.");
+        return false;
+    }
+
+    // Check if the email contains @ and .
+    if (!userEmail.includes("@") || !userEmail.includes(".")) {
+        alert("Please provide a valid email address.");
+        return false;
+    }
+
+    // Add any additional validation logic as needed
+
+    return true;
+}
+
+// ... Existing code continues ...
+
+
+
+
+
+// ... Existing code ...
+
+// Modify the event listener for the Start button
+start.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    // Call the validation function before proceeding
+    if (!validateNameAndEmail()) {
+        return;
+    }
+
     AddParticipantDetails(event);
     showContent2(event);
 });
+
+// ... Existing code continues ...
+
 next.addEventListener("click", showContent2);
+back.addEventListener("click", goBackToGame);
 resetBtn.addEventListener("click", skip);
 typingInput.addEventListener("input", initGame);
 inputs.addEventListener("click", () => typingInput.focus());
 document.addEventListener("keydown", () => typingInput.focus());
 // Ensure that the event is properly bound to the button
 // document.querySelector('.content-1 p span button').addEventListener('click', leaderboard);
+leaderboardBtn.addEventListener("click", function(event) {
+    updateLeaderboard(event);
+    showLeaderboard();
+});
+
 
 

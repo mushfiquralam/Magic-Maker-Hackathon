@@ -16,7 +16,6 @@ body{
 }
 .wrapper{
   width: 650px;
-  /* width: 430px; */
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -29,7 +28,7 @@ body{
 }
 
 .wrapper .content-1, .wrapper .content-2{
-  margin: 25px 25px 35px;
+  margin: 15px 25px 35px;
 }
 .content-1 .inputs, .content-2 .inputs{
   display: flex;
@@ -64,7 +63,7 @@ body{
 }
 .details p{
   font-size: 19px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .content-2 .skip-btn{
   width: 100%;
@@ -89,13 +88,12 @@ body{
   margin-left: 5px; /* Add some margin to separate the icon from text */
 }
 .content-1 .startBtn {
-  width: 30%;
+  width: 25%;
   border: none;
   cursor: pointer;
   color: #fff;
   outline: none;
-  padding: 10px 0;
-  /* margin-bottom: 20px; */
+  padding: 8px 0;
   font-size: 20px;
   border-radius: 5px;
   background: #5E63BA;
@@ -109,7 +107,7 @@ body{
 }
 
 .details li {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 .content-2{
   display: none;
@@ -125,7 +123,7 @@ body{
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.6);
+  background: #5E63BA;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,13 +140,21 @@ body{
 }
 .game-modal img {
   max-width: 130px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 .game-modal img[src="images/victory.gif"] {
   margin-left: -10px;
 }
-.game-modal h4 {
+.game-modal .message {
   font-size: 1.53rem;
+  margin: 10px 0 5px;
+}
+.game-modal .points {
+  font-size: 1.35rem;
+  margin: 15px 0 15px;
+}
+.game-modal .totalPoints {
+  font-size: 1.25rem;
   margin: 10px 0 5px;
 }
 .game-modal p {
@@ -160,24 +166,48 @@ body{
   color: #5E63BA;
   font-weight: 600;
 }
-.game-modal button {
-  padding: 12px 23px;
+
+.results .game-modal .content .buttons-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px; /* Adjust the margin as needed */
 }
 
-.game-modal button {
-  color: #fff;
+.results .game-modal .content .leaderboard-btn,
+.results .game-modal .content .next-btn {
   border: none;
   cursor: pointer;
-  font-size: 1rem;
+  /* font-size: 1rem; */
   font-weight: 600;
   border-radius: 4px;
   text-transform: uppercase;
+  padding: 8px 15px;
   background: #5E63BA;
+  color: #fff;
+  transition: background 0.3s ease;
 }
 
-.game-modal button:hover {
+
+.final #leaderboard .goBack {
+  border: none;
+  cursor: pointer;
+  /* font-size: 1rem; */
+  font-weight: 300;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  padding: 5px 10px;
+  background: #5E63BA;
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.results .game-modal .content .leaderboard-btn:hover,
+.results .game-modal .content .next-btn:hover,
+.final #leaderboard .goBack:hover {
   background: #8286c9;
 }
+
 .final {
   position: fixed;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -188,7 +218,7 @@ body{
 }
 
 #leaderboard {
-  max-width: 400px;
+  width: 500px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -200,13 +230,7 @@ body{
 #leaderboard h1 {
   text-align: center;
   color: #333;
-  margin-bottom: 20px;
-}
-
-#leaderboard ol {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
+  margin-bottom: 15px;
 }
 
 #leaderboard li {
@@ -237,7 +261,7 @@ body{
 
 #leaderboard .participant-score {
   font-weight: bold;
-  color: #007bff;
+  color: #5E63BA;
   padding-left: 30px;
   margin-left: 20px;
 }
